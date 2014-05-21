@@ -1,1 +1,22 @@
-@import "partials/file1.scss";
+
+
+// helpers
+
+  @import "partials/helpers/vars";
+  @import "partials/helpers/mixins";
+  @import "partials/helpers/findshit";
+
+
+// base
+
+  @import "partials/base/normalize";
+  @import "partials/base/typography";
+
+
+// components
+
+  @import "partials/components/containers";
+  @import "partials/components/forms";
+  @import "partials/components/buttons";
+
+  

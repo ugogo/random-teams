@@ -1,0 +1,230 @@
+
+
+// reset and html5
+
+  body, h1, h2, h3, h4, h5, h6,
+  p, blockquote, pre,
+  dl, dd, ol, ul,
+  form, fieldset, legend, button, input, select, textarea
+  table, th, td, caption,
+  hr {
+    margin: 0;
+    padding: 0;
+  }
+
+  article, aside, details, figcaption, figure, footer, header, hgroup, main, nav, section, summary {
+    display: block;
+  }
+
+  audio, canvas, video, span {
+    display: inline-block;
+  }
+
+  li {
+    list-style-type: none;
+  }
+
+  audio:not([controls]) {
+    display: none;
+    height: 0;
+  }
+
+  html {
+    background-color: #fff;
+    font-family: "Open Sans", sans-serif;
+    font-weight: 400;
+    font-size: 62.5%;
+    text-align: center;
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  a {
+    text-decoration: none;
+    background: transparent;
+
+    &:focus {
+      outline: thin dotted;
+    }
+
+    &:active,
+    &:hover {
+      outline: 0;
+    }
+  }
+
+  .accessibility {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    border:0 !important;
+    clip: rect(0 0 0 0) !important;
+    margin: -1px !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+
+  [class*="--round"] {
+    border-radius: 50%;
+  }
+
+  [hidden],
+  .hidden,
+  .none {
+    display: none !important;
+  }
+
+  [disabled], .disabled {
+    cursor: default;
+  }
+
+  .clearfix {
+    zoom:1;
+    &:before, &:after {
+      content: "\0020";
+      display: block;
+      height: 0;
+      overflow: hidden;
+    }
+    &:after {
+      clear: both;
+    }
+  }
+
+
+
+// typography
+
+  abbr[title] {
+    border-bottom: 1px dotted;
+    cursor: help;
+  }
+
+  b,
+  strong {
+    font-weight: bold;
+  }
+
+  mark {
+    background: #ff0;
+    color: #000;
+  }
+
+  code,
+  pre {
+    font-family: monospace, serif;
+    font-size: 1em;
+  }
+
+  pre {
+    white-space: pre-wrap;
+  }
+
+  q {
+    quotes: "\201C" "\201D" "\2018" "\2019";
+  }
+
+  small {
+    font-size: 80%;
+  }
+
+  sub,
+  sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+  }
+
+  sup {
+    top: -0.5em;
+  }
+
+  sub {
+    bottom: -0.25em;
+  }
+
+
+
+// forms
+
+  button {
+    border: 0;
+  }
+  
+  button, input, select, textarea {
+    font-family: inherit;
+    font-size: 100%;
+    line-height: normal;
+  }
+
+  button, select {
+    text-transform: none;
+  }
+
+  input[type="checkbox"],
+  input[type="radio"] {
+    box-sizing: border-box;
+    padding: 0;
+  }
+
+  button::-moz-focus-inner,
+  input::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+  }
+
+  textarea {
+    overflow: auto;
+    vertical-align: top;
+  }
+
+  label, input, textarea, button, select, option {
+    cursor: pointer;
+  }
+
+  textarea:active,
+  textarea:focus,
+  input:active,
+  input:focus {
+    cursor:text;
+    outline:none;
+  }
+
+  table {
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+    border: 0;
+    font-style:italic;
+}
+
+
+
+// detected features
+
+  .no-svg {
+    svg,
+    svg:not(:root),
+    img[src*=".svg"] {
+      display: none;
+    }
+  }
+  .svg {
+    i.icon.svg-fallback {
+      display: none;
+    }
+  }
+
+  svg:not(:root) {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+
+  
