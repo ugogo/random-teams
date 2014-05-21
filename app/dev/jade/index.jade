@@ -1,0 +1,23 @@
+extends layout
+
+block head
+  title Gulp starter
+
+block content
+  - var current_page = "homepage"
+  h1 Hey Gulp, current_page : #{current_page}
+  h2 Me
+  p My first name is #{me.first_name}
+  if me.city
+    p I live in #{me.city}
+  else
+    p I'm homeless
+  if letters
+    h2 Spell my name
+    ul
+      each val in letters
+        li= val
+  +article("Hello world!")
+
+block scripts
+  script(src="js/app.js")
