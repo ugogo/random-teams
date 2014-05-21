@@ -1,0 +1,44 @@
+{
+  "name": "Gulp-starter",
+  "version": "0.0.1",
+  "description": "",
+  "author": "Ugo Onali",
+  "keywords": [
+    "html",
+    "css",
+    "gulp",
+    "starter"
+  ],
+  "dependencies": {
+    "gulp": "~3.5.6",
+    "gulp-autoprefixer": "~0.0.6",
+    "gulp-concat": "~2.2.0",
+    "gulp-connect": "~1.0.9",
+    "gulp-cssmin": "~0.1.4",
+    "gulp-uglify": "~0.2.1",
+    "gulp-jshint": "~1.5.2",
+    "jshint-stylish": "~0.1.5",
+    "gulp-livereload": "~1.2.0",
+    "gulp-minify-html": "~0.1.1",
+    "gulp-sass": "~0.7.1",
+    "gulp-util": "~2.2.14",
+    "gulp-watch": "~0.5.3",
+    "gulp-imagemin": "~0.1.5",
+    "minimize": "~0.7.1",
+    "through2": "~0.4.1",
+    "gulp-uncss": "~0.4.1",
+    "gulp-file-include": "~0.2.1",
+    "gulp-clean": "~0.2.4",
+    "gulp-jade": "~0.5.0",
+    "gulp-plumber": "~0.6.1",
+    "gulp-imports": "0.0.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/onaliugo/gulp-starter"
+  },
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/onaliugo/gulp-starter/issues"
+  }
+}

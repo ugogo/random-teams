@@ -1,0 +1,7 @@
+.DS_Store
+app/build/
+app/dev/css/
+app/dev/imgs/
+app/dev/fonts/
+app/dev/*.html
+node_modules/
