@@ -16,7 +16,6 @@ var gulp        = require("gulp")
   , stylish     = require("jshint-stylish")
 
   , uglify      = require("gulp-uglify")
-  , uncss       = require("gulp-uncss")
   , cssmin      = require("gulp-cssmin")
   , htmlmin     = require("gulp-minify-html")
   , imagemin    = require("gulp-imagemin")
@@ -141,10 +140,7 @@ gulp.task("build-html", function() {
 
 gulp.task("build-css", function(){
 
-  var opts = { html: [buildpath + "index.html"] };
-
   gulp.src(paths.dev.cssfiles)
-      .pipe(uncss(opts))
       .pipe(cssmin())
       .pipe(gulp.dest(paths.build.css))
       ;
