@@ -7,6 +7,7 @@ var gulp        = require("gulp")
   , watch       = require("gulp-watch")
   , connect     = require("gulp-connect")
   , livereload  = require("gulp-livereload")
+  , deploy      = require("gulp-gh-pages")
   
   , sass        = require("gulp-sass")
   , autoprefix  = require("gulp-autoprefixer")
@@ -171,6 +172,13 @@ gulp.task("build-fonts", function() {
   gulp.src(paths.dev.fontfiles)
       .pipe(gulp.dest(paths.build.fonts));
 
+});
+
+gulp.task('build-deploy', function(){
+
+  gulp.src('./app/build/**/*')
+    .pipe(deploy());
+    
 });
 
 
