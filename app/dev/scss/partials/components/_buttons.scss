@@ -8,8 +8,8 @@
   border-radius: 2px;
   box-sizing: border-box;
 
-  @include rem(font-size, 20px);
-  @include rem(padding, 20px 0);
+  @include rem(font-size, 16px);
+  @include rem(padding, 15px 0);
 }
 
 .button--orange {

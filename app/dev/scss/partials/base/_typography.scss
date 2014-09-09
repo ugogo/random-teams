@@ -10,16 +10,16 @@ body {
   h1 {
     font-weight: 700;
     line-height: 1.2;
-    letter-spacing: -0.05em;
-    @include rem(font-size, 45px );
-    @include rem(margin-bottom, 40px );
+    letter-spacing: -0.03em;
+    @include rem(font-size, 35px );
+    @include rem(margin-bottom, 30px );
   }
 
   h2 {
     font-weight: 700;
     line-height: 1.2;
     letter-spacing: -0.05em;
-    @include rem(font-size, 30px);
+    @include rem(font-size, 25px);
   }
 
 
@@ -30,7 +30,7 @@ body {
     font-weight: 400;
     color: $dark-grey;
     
-    @include rem(font-size, 18px);
+    @include rem(font-size, 14px);
   }
 
   p {
@@ -39,10 +39,9 @@ body {
   }
 
   #js-teams_container span {
-    letter-spacing: 0.02em;
     line-height: 2;
-    @include rem(font-size, 20px);
-    @include rem(margin, 0 10px 20px 0);
+    @include rem(font-size, 16px);
+    @include rem(margin, 0 8px 15px 0);
 
     &.last-item {
       margin-right: 0;

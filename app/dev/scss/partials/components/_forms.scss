@@ -5,13 +5,14 @@ input {
   color: #666;
   border: 2px solid $grey;
   border-radius: 3px;
-  transition: all .3s ease-out;
+  transition: border-color .3s ease-out;
   box-sizing: border-box;
   background-color: #fff;
+  -webkit-appearance: none;
 
-  @include rem(font-size, 16px);
-  @include rem(padding, 15px 20px);
-  @include rem(margin-bottom, 15px);
+  @include rem(font-size, 14px);
+  @include rem(padding, 13px 20px 13px 15px);
+  @include rem(margin-bottom, 10px);
 
   &.error {
     border-color: $error;

@@ -1,12 +1,12 @@
 
 .app {
-  width: 90%;
+  width: 85%;
   margin: 0 auto;
   @include rem(max-width, 400px);
 }
 
 .container {
-  @include rem(padding, 80px 0 40px 0);
+  @include rem(padding, 40px 0 40px 0);
 
   ul {
     @include rem(margin-bottom, 20px);
