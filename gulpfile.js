@@ -1,190 +1,186 @@
 
+var del = require('del'),
+  gulp = require('gulp'),
+  gutil = require('gulp-util'),
+  browserSync = require('browser-sync'),
+  browserReload = browserSync.reload,
+  deploy  = require('gulp-gh-pages'),
 
-var gulp        = require("gulp")
-  , gutil       = require("gulp-util")
-  , clean       = require("gulp-clean")
-  , plumber     = require("gulp-plumber") 
-  , watch       = require("gulp-watch")
-  , connect     = require("gulp-connect")
-  , livereload  = require("gulp-livereload")
-  , deploy      = require("gulp-gh-pages")
-  
-  , sass        = require("gulp-sass")
-  , autoprefix  = require("gulp-autoprefixer")
-  , imports     = require("gulp-imports")
-  , jshint      = require("gulp-jshint")
-  , jade        = require("gulp-jade")
-  , stylish     = require("jshint-stylish")
+  // html
+    jade = require('gulp-jade'),
+    htmlmin = require('gulp-minify-html'),
 
-  , uglify      = require("gulp-uglify")
-  , cssmin      = require("gulp-cssmin")
-  , htmlmin     = require("gulp-minify-html")
-  , imagemin    = require("gulp-imagemin")
+  // css
+    sass = require('gulp-sass'),
+    prefix = require('gulp-autoprefixer'),
+    cssmin  = require('gulp-cssmin'),
 
-  , devpath     = "app/dev/"
-  , buildpath   = "app/build/"
+  // js
+    browserify = require('browserify'),
+    source = require('vinyl-source-stream'),
+    jshint = require('gulp-jshint'),
+    stylish = require('jshint-stylish'),
+    streamify = require('gulp-streamify'),
+    uglify = require('gulp-uglify'),
 
-  , paths = {
-      dev: {
-          js:           devpath + "js/"
-        , css:          devpath + "css/"
-        , jsfiles:      devpath + "js/partials/**/*.js"
-        , cssfiles:     devpath + "css/*.css"
-        , scssfiles:    devpath + "scss/**/*.scss"
-        , fontfiles:    devpath + "fonts/**/*"
-        , jadefiles:    devpath + "jade/*.jade"
-        , jadepartials: devpath + "jade/**/*.jade"
-        , imagesfiles:  devpath + "imgs/**/*"
+  // imgs
+    imagemin = require('gulp-imagemin'),
+    pngcrush = require('imagemin-pngcrush'),
+
+
+  // opts
+    opts = {
+      del: {
+        force: true
+      },
+      jade: {
+        pretty: true
+      },
+      htmlmin: {
+        comments: false
+      },
+      sass: {
+        /*sourceMap: 'none',
+        sourceComments: 'map'*/
+      },
+      browserify: {
+        debug: true,
+        insertGlobals: false
+      },
+      browserSync: {
+        // open: false,
+        server: {
+          baseDir: 'dist/'
+        }
       }
-      , build: {
-          js:    buildpath + "js/"
-        , css:   buildpath + "css/"
-        , imgs:  buildpath + "imgs/"
-        , fonts: buildpath + "fonts/"
-      }
-  }
-  ;
+    };
 
 
+// handle errors
+  var handleError = function(err) {
+    var taskErrorMessage = 'An error occurred';
+    var errorMessage = err.toString();
+    gutil.log(gutil.colors.red(taskErrorMessage));
+    gutil.log(gutil.colors.red(errorMessage));
+    this.emit('end');
+  };
 
-// dev tasks
+// html tasks
+  gulp.task('dev-html', function(){
+    return gulp.src(['./src/jade/**/*.jade', '!./src/jade/partials/**'])
+      .pipe(jade(opts.jade))
+      .on('error', handleError)
+      .pipe(gulp.dest('./dist/'))
+      .pipe(browserReload({ stream: true }));
+  });
+  gulp.task('build-html', function(){
+    del('dist/*.html', opts.del);
+    return gulp.src(['./src/jade/**/*.jade', '!./src/jade/partials/**'])
+      .pipe(jade())
+      .on('error', handleError)
+      .pipe(htmlmin(opts.htmlmin))
+      .on('error', handleError)
+      .pipe(gulp.dest('./dist/'));
+  });
 
-gulp.task("dev-html", function() {
+// css tasks
+  gulp.task('dev-css', function(){
+    return gulp.src('./src/scss/*.scss')
+      .pipe(sass(opts.sass))
+      .on('error', handleError)
+      .pipe(prefix('last 1 version', '> 1%', 'ie 8', 'ie 7'))
+      .on('error', handleError)
+      .pipe(gulp.dest('./dist/css/'))
+      .pipe(browserReload({ stream: true }));
+  });
+  gulp.task('build-css', function(){
+    return gulp.src('./src/scss/*.scss')
+      .pipe(sass())
+      .on('error', handleError)
+      .pipe(prefix('last 1 version', '> 1%', 'ie 8', 'ie 7'))
+      .on('error', handleError)
+      .pipe(cssmin())
+      .on('error', handleError)
+      .pipe(gulp.dest('./dist/css/'));
+  });
 
-  var opts = {pretty: true}
+// js tasks
+  gulp.task('dev-js', function(){
+    gulp.src('./src/js/**/*.js')
+    .pipe(jshint())
+    .pipe(jshint.reporter('jshint-stylish'))
+    .pipe(gulp.dest('dist/js/'))
+    .pipe(browserReload({
+      stream: true,
+      once: true
+    }));
+  });
+  gulp.task('build-js', function(){
+    gulp.src('src/js/**/*.js')
+    .pipe(jshint())
+    .pipe(jshint.reporter('jshint-stylish'))
+    .pipe(uglify())
+    .pipe(gulp.dest('dist/js/'));
+  });
 
-  gulp.src(devpath + "*.html")
-      .pipe(clean({force: true}))
-      ;
+// webfonts tasks
+  gulp.task('dev-fonts', function(){
+    return gulp.src('./src/fonts/**')
+      .pipe(gulp.dest('./dist/fonts/'))
+  });
 
-  gulp.src(paths.dev.jadefiles)
-      .pipe(plumber())
-      .pipe(jade(opts))
-      .pipe(gulp.dest(devpath))
-      .pipe(connect.reload())
-      ;
+// imgs tasks
+  gulp.task('dev-imgs', function (){
+    return gulp.src('src/imgs/**')
+      .pipe(gulp.dest('dist/imgs/'));
+  });
+  gulp.task('build-imgs', function (){
+    return gulp.src('src/imgs/**')
+      .pipe(imagemin({
+        progressive: true,
+        svgoPlugins: [{removeViewBox: false}],
+        use: [pngcrush()]
+      }))
+      .pipe(gulp.dest('dist/imgs/'));
+  });
 
-});
-
-gulp.task("dev-css", function() {
-
-  var opts = { style: "expanded" };
-
-  gulp.src(paths.dev.scssfiles)
-      .pipe(plumber())
-      .pipe(sass(opts))
-      .pipe(autoprefix("last 2 versions", "> 1%", "Explorer 7", "Android 2"))
-      .pipe(gulp.dest(paths.dev.css))
-      .pipe(connect.reload())
-      ;
-
-});
-
-gulp.task("dev-js", function(){
-
-  gulp.src(paths.dev.js + "partials/app.js")
-    .pipe(imports())
-    .pipe(gulp.dest(paths.dev.js))
-    ;
-
-  gulp.src(paths.dev.jsfiles)
-      .pipe(jshint())
-      .pipe(jshint.reporter("jshint-stylish"))
-      .pipe(connect.reload())
-      ;
-
-});
-
-gulp.task("dev-connect", connect.server({
-
-  root: [devpath],
-  port: 1337,
-  livereload: true,
-  open: {
-    browser: "Google Chrome"
-  }
-
-}));
-
-gulp.task("dev-watch", function() {
-
-  gulp.watch(paths.dev.jadepartials, ["dev-html"]);
-  gulp.watch(paths.dev.scssfiles,    ["dev-css"]);
-  gulp.watch(paths.dev.jsfiles,      ["dev-js"]);
-
-});
-
-
+// local tasks
+  gulp.task('dev-watch', function(){
+    gulp.watch('src/js/**',    ['dev-js']);
+    gulp.watch('src/scss/**',  ['dev-css']);
+    gulp.watch('src/jade/**',  ['dev-html']);
+    gulp.watch('src/imgs/**',  ['dev-imgs']);
+    gulp.watch('src/fonts/**', ['dev-fonts']);
+  });
+  gulp.task('dev-serve', function(){
+    browserSync.init(opts.browserSync);
+  });
+  gulp.task('dev-generate-files', [
+    'build-clean',
+    'dev-html',
+    'dev-css',
+    'dev-js',
+    'dev-imgs',
+    'dev-fonts'
+  ]);
+  gulp.task('default', [
+    'dev-generate-files',
+    'dev-serve',
+    'dev-watch'
+  ]);
 
 // build tasks
-
-gulp.task("pre-build", function(){
-
-  gulp.src(buildpath + "**/*", {read: false})
-      .pipe(clean({force: true}))
-      ;
-
-  gulp.src(buildpath, {read: false})
-      .pipe(clean({force: true}))
-      ;
-
-});
-
-gulp.task("build-html", function() {
-
-  gulp.src(devpath + "*.html")
-    .pipe(htmlmin())
-    .pipe(gulp.dest(buildpath))
-    ;
-
-});
-
-gulp.task("build-css", function(){
-
-  gulp.src(paths.dev.cssfiles)
-      .pipe(cssmin())
-      .pipe(gulp.dest(paths.build.css))
-      ;
-
-});
-
-gulp.task("build-js", function(){
-
-  var opts = {}
-
-  gulp.src(paths.dev.js + "app.js")
-      .pipe(uglify(opts))
-      .pipe(gulp.dest(paths.build.js))
-      ;
-
-});
-
-gulp.task("build-imgs", function() {
-
-  gulp.src(paths.dev.imagesfiles)
-      .pipe(imagemin())
-      .pipe(gulp.dest(paths.build.imgs));
-
-});
-
-gulp.task("build-fonts", function() {
-
-  gulp.src(paths.dev.fontfiles)
-      .pipe(gulp.dest(paths.build.fonts));
-
-});
-
-gulp.task('build-deploy', function(){
-
-  gulp.src('./app/build/**/*')
-    .pipe(deploy());
-    
-});
-
-
-
-// tasks
-
-gulp.task("build",   ["pre-build", "build-html", "build-css", "build-js", "build-imgs", "build-fonts"]);
-gulp.task("default", ["dev-html", "dev-css", "dev-js", "dev-connect", "dev-watch"]);
-
+  gulp.task('build-clean', function(){
+    return del('dist/', opts.del);
+  });
+  gulp.task('deploy', function(){
+    return gulp.src('./dist/**/*')
+      .pipe(deploy());
+  });
+  gulp.task('build', [
+    'build-clean',
+    'build-html',
+    'build-css',
+    'build-js',
+    'build-imgs'
+  ]);

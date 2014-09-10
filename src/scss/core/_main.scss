@@ -1,0 +1,44 @@
+body {
+  font-family: $PT;
+  font-weight: 400;
+  text-align: center;
+  color: $black;
+  -webkit-font-smoothing: antialiased;
+}
+
+section {
+  margin-bottom: 4em;
+}
+
+.app {
+  width: 85%;
+  max-width: 25em;
+  margin: 0 auto;
+  padding: 2.5em 0;
+}
+
+ul {
+  margin-bottom: 20px;
+}
+
+
+/*
+ * $Typo
+ */
+h1, h2 {
+  margin: 0 0 .3em 0;
+  font-weight: 700;
+}
+
+h1 {
+  font-size: 1.8em;
+  margin-bottom: .6em;
+}
+h2 {
+  font-size: 1.2em;
+}
+
+p {
+  line-height: 1.8;
+  margin: 0 0 1em 0;
+}
