@@ -1,0 +1,16 @@
+.animated {
+  animation-duration: .4s;
+  animation-fill-mode: both;
+}
+.wobble {
+  animation-name: wobble;
+}
+
+@keyframes wobble {
+  0%, 100% { transform: none; }
+  15%  { transform: translate3d(-5%, 0, 0); }
+  30%  { transform: translate3d(5%, 0, 0);  }
+  45%  { transform: translate3d(-5%, 0, 0); }
+  60%  { transform: translate3d(5%, 0, 0);  }
+  75%  { transform: translate3d(-5%, 0, 0); }
+}
