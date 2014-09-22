@@ -1,3 +1,7 @@
+// hide url bar
+setTimeout(function() {
+  window.scrollTo(0, 1);
+}, 1000);
 
 var d = document;
 var $app = d.querySelector('.app');
