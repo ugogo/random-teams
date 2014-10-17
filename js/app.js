@@ -1,1 +1,153 @@
-!function e(n,r,a){function t(s,i){if(!r[s]){if(!n[s]){var l="function"==typeof require&&require;if(!i&&l)return l(s,!0);if(o)return o(s,!0);var u=new Error("Cannot find module '"+s+"'");throw u.code="MODULE_NOT_FOUND",u}var c=r[s]={exports:{}};n[s][0].call(c.exports,function(e){var r=n[s][1][e];return t(r?r:e)},c,c.exports,e,n,r,a)}return r[s].exports}for(var o="function"==typeof require&&require,s=0;s<a.length;s++)t(a[s]);return t}({1:[function(){setTimeout(function(){window.scrollTo(0,1)},1e3);var e=document,n=e.querySelector(".app"),r=!1,a={$countContainer:e.querySelector(".js-container-step-1"),$countForm:e.querySelector(".js-valid-players-number"),$totalPlayers:e.querySelector(".js-total-players"),$byTeamPlayers:e.querySelector(".js-byteam-players"),$namesMainContainer:e.querySelector(".js-container-step-2"),$namesForm:e.querySelector(".js-new-players-form"),$namesContainer:e.querySelector(".js-new-players-container"),$teamsMainContainer:e.querySelector(".js-container-step-3"),$teamsContainer:e.querySelector(".js-teams-container"),generateInputs:function(){for(var n=0;n<a.total;n++){var r=e.createElement("input");r.classList.add("js-new-player"),r.placeholder="Player #"+(n+1),this.$namesContainer.appendChild(r)}},checkInput:function(e){var n=e.value,r=!isNaN(n),a=0===n.length,t=!r||a;return t},sortTeams:function(){for(var n=a.names,r=n.length,o=this.$byTeamPlayers.value,s=0;s<n.length;s++)n=t(n);for(var i=0;r>i;i++){var l=e.createElement("span"),u=i%o===0,c=i%o===o-1,m=i===r-1;if(l.innerHTML=n[i],u){var p=e.createElement("h2"),d=Math.round((i+2)/o);p.innerHTML="Team #"+d,this.$teamsContainer.appendChild(p)}c||m||(l.innerHTML+=", "),this.$teamsContainer.appendChild(l)}}},t=function(e){for(var n,r,a=e.length;a;n=parseInt(Math.random()*a),r=e[--a],e[a]=e[n],e[n]=r);return e};a.$countForm.onsubmit=function(e){if(e.preventDefault(),!r){var t=a,o=t.$totalPlayers,s=t.$byTeamPlayers,i=0;n.className="app",[o,s].forEach(function(e){var n=t.checkInput(e);e.classList.toggle("error",n),n&&i++}),Number(s.value)>=Number(o.value)?(o.classList.add("error"),s.classList.add("error"),i++):t.total=o.value,i>0?n.className+=" wobble animated":(t.$countContainer.classList.add("hidden"),t.$namesMainContainer.classList.remove("hidden"),t.generateInputs())}},a.$namesForm.onsubmit=function(e){if(e.preventDefault(),!r){var t=a,o=this.querySelectorAll("input");a.names=[],[].forEach.call(o,function(e){var n=0===e.value.length;e.classList.toggle("error",n),n||a.names.push(e.value)}),a.names.length==a.total?(t.$namesMainContainer.classList.add("hidden"),t.$teamsMainContainer.classList.remove("hidden"),t.sortTeams()):n.className+=" wobble animated"}},n.addEventListener("webkitAnimationEnd",function(){n.className="app",r=!1})},{}]},{},[1]);
+// hide url bar
+setTimeout(function() {
+  window.scrollTo(0, 1);
+}, 1000);
+
+var d = document;
+var $app = d.querySelector('.app');
+var animationRunning = false;
+var Players = {
+  // step 1
+  $countContainer: d.querySelector('.js-container-step-1'),
+  $countForm: d.querySelector('.js-valid-players-number'),
+  $totalPlayers: d.querySelector('.js-total-players'),
+  $byTeamPlayers: d.querySelector('.js-byteam-players'),
+
+  // step 2
+  $namesMainContainer: d.querySelector('.js-container-step-2'),
+  $namesForm: d.querySelector('.js-new-players-form'),
+  $namesContainer: d.querySelector('.js-new-players-container'),
+
+  // step 3
+  $teamsMainContainer: d.querySelector('.js-container-step-3'),
+  $teamsContainer: d.querySelector('.js-teams-container'),
+
+  generateInputs: function(){
+    for(var i=0; i<Players.total; i++){
+      var input = d.createElement("input");
+      input.classList.add("js-new-player");
+      input.placeholder = 'Player #' + (i+1);
+      this.$namesContainer.appendChild(input);
+    }
+  },
+  checkInput: function($input){
+    var val = $input.value;
+    var isNumber = !isNaN(val);
+    var isTooShort = val.length === 0;
+    var hasError = (!isNumber || isTooShort);
+
+    return hasError;
+  },
+  sortTeams: function(){
+    var players = Players.names;
+    var playersLength = players.length;
+    var playersByTeam = this.$byTeamPlayers.value;
+
+    // monster shuffle
+    for(var i=0; i<players.length; i++){
+      players = shuffleArray(players);
+    }
+
+    // start da machine
+    for(var j=0; j<playersLength; j++){
+      var $newPlayer = d.createElement('span');
+      var isNewTeam = (j % playersByTeam) === 0;
+      var isEndTeam = (j % playersByTeam) === (playersByTeam - 1);
+      var isLast = j === (playersLength - 1);
+      // var isEndTeam = (i/playersByTeam) % 1;
+      // var currentPlayer = players[i-1];
+
+      $newPlayer.innerHTML = players[j];
+
+      if(isNewTeam){
+        var $h2 = d.createElement('h2');
+        var index = Math.round((j + 2)/playersByTeam);
+        $h2.innerHTML = 'Team #'+index;
+        this.$teamsContainer.appendChild($h2);
+      }
+      if(!isEndTeam && !isLast){
+        $newPlayer.innerHTML += ', ';
+      }
+        this.$teamsContainer.appendChild($newPlayer);
+    }
+  }
+};
+
+var shuffleArray = function(array){
+  for(var j, x, i = array.length; i; j = parseInt(Math.random() * i), x = array[--i], array[i] = array[j], array[j] = x);
+  return array;
+};
+
+Players.$countForm.onsubmit = function(evt){
+  evt.preventDefault();
+  if(animationRunning) return;
+
+  var _this = Players;
+  var $totalPlayers = _this.$totalPlayers;
+  var $byTeamPlayers = _this.$byTeamPlayers;
+  var totalErrors = 0;
+
+  // reset app classes
+  $app.className = 'app';
+
+  // display error for each input
+  [$totalPlayers, $byTeamPlayers].forEach(function(el){
+    var hasError = _this.checkInput(el);
+    el.classList.toggle('error', hasError);
+    if(hasError)
+      totalErrors++;
+  });
+
+  // check if players by team are not superior at total players
+  // if not, store the total players value
+  if(Number($byTeamPlayers.value) >= Number($totalPlayers.value)){
+    $totalPlayers.classList.add('error');
+    $byTeamPlayers.classList.add('error');
+    totalErrors++;
+  }
+  else {
+    _this.total = $totalPlayers.value;
+  }
+
+  // if many errors, wobble $app
+  // if not, generate inputs for next step
+  if(totalErrors > 0)
+    $app.className += ' wobble animated';
+  else{
+    _this.$countContainer.classList.add('hidden');
+    _this.$namesMainContainer.classList.remove('hidden');
+    _this.generateInputs();
+  }
+};
+
+Players.$namesForm.onsubmit = function(evt){
+  evt.preventDefault();
+  if(animationRunning) return;
+
+  var _this = Players;
+  var $inputs = this.querySelectorAll('input');
+  Players.names = [];
+
+  // check errors
+  [].forEach.call($inputs, function(el){
+    var isEmpty = el.value.length === 0;
+    el.classList.toggle('error', isEmpty);
+    if(!isEmpty)
+      Players.names.push(el.value);
+  });
+
+  // if no errors, continue
+  if(Players.names.length == Players.total){
+    _this.$namesMainContainer.classList.add('hidden');
+    _this.$teamsMainContainer.classList.remove('hidden');
+    _this.sortTeams();
+  }
+  else {
+    $app.className += ' wobble animated';
+  }
+};
+
+$app.addEventListener('webkitAnimationEnd', function(){
+  $app.className = 'app';
+  animationRunning = false;
+});
